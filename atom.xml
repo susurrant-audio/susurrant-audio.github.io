@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>susurrant.org: blog</title>
+    <link href="http://susurrant.org//atom.xml" rel="self" />
+    <link href="http://susurrant.org/" />
+    <id>http://susurrant.org//atom.xml</id>
+    <author>
+        <name>Chris Johnson-Roberson</name>
+        <email>info@susurrant.org</email>
+    </author>
+    <updated>2015-05-03T00:00:00Z</updated>
+    <entry>
+    <title>Presentation at "Inertia" (UCLA)</title>
+    <link href="http://susurrant.org//posts/2015/05/03/inertia/" />
+    <id>http://susurrant.org//posts/2015/05/03/inertia/</id>
+    <published>2015-05-03T00:00:00Z</published>
+    <updated>2015-05-03T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<article>
+  <header>
+    <h1 class="entry-title">
+      <a href="/posts/2015/05/03/inertia/">Presentation at "Inertia" (UCLA)</a>
+    </h1>
+    <div class="meta small">
+      <time datetime="2015-05-03" pubdate data-updated="true">May  3, 2015</time>
+      <div class="tags"><a href="/tags/conference/">conference</a></div>
+    </div>
+  </header>
+  <div class="post-content">
+    
+  </div>
+</article>
+
+]]></summary>
+</entry>
+
+</feed>
