@@ -42,61 +42,185 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12" id="content">
+	  
           <h1 class="title">Methods</h1>
+	  
 
-          <p>To perform its analysis, Susurrant uses a variety of methods derived from <a href="http://en.wikipedia.org/wiki/Digital_signal_processing">digital signal processing (DSP)</a>, <a href="http://en.wikipedia.org/wiki/Machine_learning">machine learning</a>, and <a href="http://en.wikipedia.org/wiki/Music_information_retrieval">music information retrieval (MIR)</a>. All of these are techniques that can help to derive interesting information from audio.</p>
-<p>Most analysis procedures involving machine learning go through several overarching steps:</p>
+          <p>
+To perform its analysis, Susurrant uses a variety of methods derived from <a href="http://en.wikipedia.org/wiki/Digital_signal_processing">digital signal processing (DSP)</a>, <a href="http://en.wikipedia.org/wiki/Machine_learning">machine learning</a>, and <a href="http://en.wikipedia.org/wiki/Music_information_retrieval">music information retrieval (MIR)</a>. All of these are techniques that can help to derive interesting information from audio.
+</p>
+<p>
+Most analysis procedures involving machine learning go through several overarching steps:
+</p>
 <ul>
-<li>feature extraction: turning raw data into a representation more suitable for analysis, typically a numerical <a href="http://en.wikipedia.org/wiki/Vector">vector</a></li>
-<li>training: “fitting” a model to the data, according to certain parameters</li>
-<li>output: using the trained model to classify examples, make decisions, etc.</li>
+<li>
+feature extraction: turning raw data into a representation more suitable for analysis, typically a numerical <a href="http://en.wikipedia.org/wiki/Vector">vector</a>
+</li>
+<li>
+training: “fitting” a model to the data, according to certain parameters
+</li>
+<li>
+output: using the trained model to classify examples, make decisions, etc.
+</li>
 </ul>
-<p>Susurrant follows this general pattern; the specifics are outlined below.</p>
-<!-- TOC -->
-<h2 id="analysis-pipeline">Analysis Pipeline</h2>
-<p>This flowchart illustrates the different stages of Susurrant’s analysis, each of which will be explained in more detail.</p>
-<h4 id="todo-include-pipeline-image">TODO: include pipeline image</h4>
-<h2 id="feature-extraction">Feature Extraction</h2>
-<p>In the feature extraction phase, Susurrant transforms audio data using the following methods, each of which captures a specific piece of salient information about the audio. At present, Susurrant uses the [Essentia][essentia] library via Python to carry out these analyses.</p>
-<h3 id="mel-frequency-cepstral-coefficients">Mel-frequency Cepstral Coefficients</h3>
-<p>MFCCs are a measurement of audio’s timbre: is it bright and harsh, or dark and mellow? Often used in speech recognition tasks, the MFCC can distinguish between vowels and consonants; it can also.</p>
-<p>MFCCs can be thought of as a “spectrum of a spectrum.” First, the <a href="http://en.wikipedia.org/wiki/Fast_fourier_transform">Fast Fourier transform</a>, used extensively in DSP, transforms an audio signal into the frequency domain. The original time-based signal is analyzed for its intensity across many different frequency bands, in order to produce (for example) the familiar <a href="http://en.wikipedia.org/wiki/Spectrogram">spectrogram</a>. This frequency spectrum is then put through a Mel filterbank: a set of triangular psychoacoustic filters meant to model the frequencies emphasized by the human ear.</p>
-<h4 id="todo-mel-filterbank">TODO: mel filterbank</h4>
-<p>Finally, the logarithm of the mel-frequency cepstrum is passed through another transform (the <a href="http://en.wikipedia.org/wiki/Discrete_cosine_transform">Discrete Cosine Transform</a>). All of these steps have the effect of separating out different components of the original sound’s timbre, in a manner independent of the original sound’s pitch.</p>
-<p>The MFCC holds a great deal of information about the intensity and distribution of different frequencies present in the original audio, in a much smaller space. Often, a vector of only 12 numbers is retained from the 1024 or 2048 samples used in the FFT.</p>
-<p>There are, however, limitations to what the MFCC can capture. Compare, for example, the following audio sample with a reconstruction based on its MFCC representation:</p>
-<h4 id="todo-audio-example-of-mfcc">TODO: audio example of MFCC</h4>
-<p>Technically, Susurrant uses “gammatone-frequency cepstral coefficients,” a very similar feature that uses a slightly different psychoacoustic model. The above limitations still largely apply.</p>
-<h3 id="chroma">Chroma</h3>
-<p>Chroma is a measurement of a sound’s intensity at each of the 12 pitch classes associated with Western music. You can imagine that any musical notes and harmonies present in the sound have been mapped onto a single octave of the piano, including both black and white keys.</p>
-<p>This feature is less useful outside of musical contexts, but is still often used to characterize the harmonic content of a song.</p>
-<h3 id="beat-spectra">Beat Spectra</h3>
-<p>Beat spectra are a way of representing a sound’s similarity to itself over different time scales. They are a form of “autocorrelation,” a method that is typically used to identify the pitch of a sound, but analyzed over several seconds instead of a brief instant. On a larger scale, this process can reveal beats within the metrical structure of music or in non-musical audio that evinces rhythmic repetition.</p>
-<h4 id="todo-visual-example-of-beat-spectrum">TODO: visual example of beat spectrum</h4>
-<p>In Susurrant, the beat spectrum is treated as a signal and then processed through FFT, giving a 24-dimension feature vector (see [Foote et al.][foote] for more details of this approach).</p>
-<h2 id="training-topic-modeling">Training: Topic Modeling</h2>
-<p>Susurrant uses a technique known as [topic modeling][topicmod] to carry out its construction of a concordance of sounds. This procedure models individual “documents” (sounds) as if they were randomly assembled by combining a smaller number of “topics” in different proportions. Each “topic” is made up of a set of “words” (sonic or textual features), each with a different probability of occuring within that topic.</p>
-<p>Although this technique is often used for text, as its terminology might suggest, it can also be applied to other forms of data– including audio. [Uri Shalit et al.][shalit] have used an extension of this technique to analyze acoustic evidence of musical influence and change over time within Columbia University’s [Million Song Dataset][MSD]. The simpler technique employed here does not distinguish between audio from different eras or created by different individuals: all sounds are incorporated into a single analysis, which can later be aggregated according to content creators, timespans, or other variables.</p>
-<h3 id="caveats">Caveats</h3>
-<p>Note that topic modeling uses a “bag-of-words” model, meaning that it does not pay attention to the order of words or sonic features in its analysis. All that matters for this algorithm is the co-occurrence of certain features somewhere in the same document (for Susurrant, this is an approximately 3-minute segment of audio).</p>
-<p>Another important concern: topic modeling is a probabilistic process, meaning that its results will vary (sometimes widely) between different runs of the process. I strongly suggest running through the process several times so that you get a sense of what is “really there,” rather than only a suggestive coincidence.</p>
-<h2 id="results">Results</h2>
-<p>After a topic model has been trained on the data, Susurrant displays the resulting topics through a browser-based interface. Users can both see graphical representations of the different features associated with each topic, and hear an audio representation of these features.</p>
-<h3 id="visualization">Visualization</h3>
-<p>Susurrant uses star plots to generate specific “glyphs” for each sonic feature. Probability is represented through the opacity; fainter shapes are less likely within a topic.</p>
-<p>This graphic is not aimed at reading off the numerical values of each feature– indeed, the combined image conflates the axes of radically different feature types, rendering it useless for such a task. Rather, the combined and individual plots allow users to distinguish visually between the different tokens (and to compare tokens within a particular feature type).</p>
-<p>For example, here are two chroma features that represent different harmonic content within a sound.</p>
-<h4 id="todo-chroma-feature-star-plots">TODO: chroma feature star plots</h4>
-<p>And here are two GFCC features, showing different distributions of low and high frequencies within a spectrum.</p>
-<h4 id="todo-gfcc-feature-star-plots">TODO: GFCC feature star plots</h4>
-<h3 id="sonification">Sonification</h3>
-<p>Perhaps the most novel aspect of Susurrant compared to many other audio analysis tools is its sonification component. Every feature can be hovered over to hear how it sounds in isolation, and the topic overview graphic plays back each of its constituent tokens according to their probability (i.e., if a token has 100% probability, it will be played exclusively; if two tokens are 50%-50%, they will be played equally often; and so on.)</p>
-<h4 id="todo-audio-example-of-sonified-topics-and-tokens">TODO: audio example of sonified topics and tokens</h4>
-<p>Furthermore, the individual sounds of the corpus can be sonified according to each type of feature. Thus, users can listen to a particular sound in its original form, or as interpreted through its GFCC, chroma, or beat spectral features.</p>
-<h4 id="todo-audio-samples-of-original-track-each-feature-type">TODO: audio samples of original track, each feature type</h4>
-<h2 id="in-summary">In Summary</h2>
-<p>Each feature type in Susurrant represents a different aspect of sound, which then feeds into its algorithmic analysis. By letting you view and listen to these feature representations, the tool attempts to help you better understand the relationship between your data and the computational analysis that results.</p>
-<p>[topicmod]: [shalit]: [foote]: [MSD]:</p> 
+<p>
+Susurrant follows this general pattern; the specifics are outlined below.
+</p>
+<ul>
+<li><a href="#analysis-pipeline">Analysis Pipeline</a></li>
+<li><a href="#feature-extraction">Feature Extraction</a><ul>
+<li><a href="#mel-frequency-cepstral-coefficients">Mel-frequency Cepstral Coefficients</a></li>
+<li><a href="#chroma">Chroma</a></li>
+<li><a href="#beat-spectra">Beat Spectra</a></li>
+</ul></li>
+<li><a href="#training-topic-modeling">Training: Topic Modeling</a><ul>
+<li><a href="#caveats">Caveats</a></li>
+</ul></li>
+<li><a href="#results">Results</a><ul>
+<li><a href="#visualization">Visualization</a></li>
+<li><a href="#sonification">Sonification</a></li>
+</ul></li>
+<li><a href="#in-summary">In Summary</a></li>
+</ul>
+<h2 id="analysis-pipeline">
+Analysis Pipeline
+</h2>
+<p>
+This flowchart illustrates the different stages of Susurrant’s analysis, each of which will be explained in more detail.
+</p>
+<figure>
+<img src="./images/pipeline.png" alt="Flowchart of pipeline" />
+<figcaption>
+Flowchart of pipeline
+</figcaption>
+</figure>
+<h2 id="feature-extraction">
+Feature Extraction
+</h2>
+<p>
+In the feature extraction phase, Susurrant transforms audio data using the following methods, each of which captures a specific piece of salient information about the audio. At present, Susurrant uses the <a href="http://essentia.upf.edu">Essentia</a> library via Python to carry out these analyses.
+</p>
+<h3 id="mel-frequency-cepstral-coefficients">
+Mel-frequency Cepstral Coefficients
+</h3>
+<p>
+MFCCs are a measurement of audio’s timbre: is it bright and harsh, or dark and mellow? Often used in speech recognition tasks, the MFCC can distinguish between vowels and consonants; it can also.
+</p>
+<p>
+MFCCs can be thought of as a “spectrum of a spectrum.” First, the <a href="http://en.wikipedia.org/wiki/Fast_fourier_transform">Fast Fourier transform</a>, used extensively in DSP, transforms an audio signal into the frequency domain. The original time-based signal is analyzed for its intensity across many different frequency bands, in order to produce (for example) the familiar <a href="http://en.wikipedia.org/wiki/Spectrogram">spectrogram</a>. This frequency spectrum is then put through a Mel filterbank: a set of triangular psychoacoustic filters meant to model the frequencies emphasized by the human ear.
+</p>
+<figure>
+<img src="./images/mel_filterbank.gif" alt="Mel filterbank" />
+<figcaption>
+Mel filterbank
+</figcaption>
+</figure>
+<p>
+Finally, the logarithm of the mel-frequency cepstrum is passed through another transform (the <a href="http://en.wikipedia.org/wiki/Discrete_cosine_transform">Discrete Cosine Transform</a>). All of these steps have the effect of separating out different components of the original sound’s timbre, in a manner independent of the original sound’s pitch.
+</p>
+<p>
+The MFCC holds a great deal of information about the intensity and distribution of different frequencies present in the original audio, in a much smaller space. Often, a vector of only 12 numbers is retained from the 1024 or 2048 samples used in the FFT.
+</p>
+<p>
+There are, however, limitations to what the MFCC can capture. Compare, for example, the following audio sample with a reconstruction based on its MFCC representation:
+</p>
+<h4 id="todo-audio-example-of-mfcc">
+TODO: audio example of MFCC
+</h4>
+<p>
+Technically, Susurrant uses “gammatone-frequency cepstral coefficients,” a very similar feature that uses a slightly different psychoacoustic model. The above limitations still largely apply.
+</p>
+<h3 id="chroma">
+Chroma
+</h3>
+<p>
+Chroma is a measurement of a sound’s intensity at each of the 12 pitch classes associated with Western music. You can imagine that any musical notes and harmonies present in the sound have been mapped onto a single octave of the piano, including both black and white keys.
+</p>
+<p>
+This feature is less useful outside of musical contexts, but is still often used to characterize the harmonic content of a song.
+</p>
+<h3 id="beat-spectra">
+Beat Spectra
+</h3>
+<p>
+Beat spectra are a way of representing a sound’s similarity to itself over different time scales. They are a form of “autocorrelation,” a method that is typically used to identify the pitch of a sound, but analyzed over several seconds instead of a brief instant. On a larger scale, this process can reveal beats within the metrical structure of music or in non-musical audio that evinces rhythmic repetition.
+</p>
+<h4 id="todo-visual-example-of-beat-spectrum">
+TODO: visual example of beat spectrum
+</h4>
+<p>
+In Susurrant, the beat spectrum is treated as a signal and then processed through FFT, giving a 24-dimension feature vector (see <a href="https://www.fxpal.com/publications/the-beat-spectrum-a-new-approach-to-rhythm-analysis.pdf">Foote et al.</a> for more details of this approach).
+</p>
+<h2 id="training-topic-modeling">
+Training: Topic Modeling
+</h2>
+<p>
+Susurrant uses a technique known as <a href="https://www.cs.princeton.edu/~blei/topicmodeling.html">topic modeling</a> to carry out its construction of a concordance of sounds. This procedure models individual “documents” (sounds) as if they were randomly assembled by combining a smaller number of “topics” in different proportions. Each “topic” is made up of a set of “words” (sonic or textual features), each with a different probability of occuring within that topic.
+</p>
+<p>
+Although this technique is often used for text, as its terminology might suggest, it can also be applied to other forms of data– including audio. <a href="http://jmlr.org/proceedings/papers/v28/shalit13.pdf">Uri Shalit et al.</a> have used an extension of this technique to analyze acoustic evidence of musical influence and change over time within Columbia University’s <a href="http://labrosa.ee.columbia.edu/millionsong/">Million Song Dataset</a>. The simpler technique employed here does not distinguish between audio from different eras or created by different individuals: all sounds are incorporated into a single analysis, which can later be aggregated according to content creators, timespans, or other variables.
+</p>
+<h3 id="caveats">
+Caveats
+</h3>
+<p>
+Note that topic modeling uses a “bag-of-words” model, meaning that it does not pay attention to the order of words or sonic features in its analysis. All that matters for this algorithm is the co-occurrence of certain features somewhere in the same document (for Susurrant, this is an approximately 3-minute segment of audio).
+</p>
+<p>
+Another important concern: topic modeling is a probabilistic process, meaning that its results will vary (sometimes widely) between different runs of the process. I strongly suggest running through the process several times so that you get a sense of what is “really there,” rather than only a suggestive coincidence.
+</p>
+<h2 id="results">
+Results
+</h2>
+<p>
+After a topic model has been trained on the data, Susurrant displays the resulting topics through a browser-based interface. Users can both see graphical representations of the different features associated with each topic, and hear an audio representation of these features.
+</p>
+<h3 id="visualization">
+Visualization
+</h3>
+<p>
+Susurrant uses star plots to generate specific “glyphs” for each sonic feature. Probability is represented through the opacity; fainter shapes are less likely within a topic.
+</p>
+<p>
+This graphic is not aimed at reading off the numerical values of each feature– indeed, the combined image conflates the axes of radically different feature types, rendering it useless for such a task. Rather, the combined and individual plots allow users to distinguish visually between the different tokens (and to compare tokens within a particular feature type).
+</p>
+<p>
+For example, here are two chroma features that represent different harmonic content within a sound.
+</p>
+<h4 id="todo-chroma-feature-star-plots">
+TODO: chroma feature star plots
+</h4>
+<p>
+And here are two GFCC features, showing different distributions of low and high frequencies within a spectrum.
+</p>
+<h4 id="todo-gfcc-feature-star-plots">
+TODO: GFCC feature star plots
+</h4>
+<h3 id="sonification">
+Sonification
+</h3>
+<p>
+Perhaps the most novel aspect of Susurrant compared to many other audio analysis tools is its sonification component. Every feature can be hovered over to hear how it sounds in isolation, and the topic overview graphic plays back each of its constituent tokens according to their probability (i.e., if a token has 100% probability, it will be played exclusively; if two tokens are 50%-50%, they will be played equally often; and so on.)
+</p>
+<h4 id="todo-audio-example-of-sonified-topics-and-tokens">
+TODO: audio example of sonified topics and tokens
+</h4>
+<p>
+Furthermore, the individual sounds of the corpus can be sonified according to each type of feature. Thus, users can listen to a particular sound in its original form, or as interpreted through its GFCC, chroma, or beat spectral features.
+</p>
+<h4 id="todo-audio-samples-of-original-track-each-feature-type">
+TODO: audio samples of original track, each feature type
+</h4>
+<h2 id="in-summary">
+In Summary
+</h2>
+<p>
+Each feature type in Susurrant represents a different aspect of sound, which then feeds into its algorithmic analysis. By letting you view and listen to these feature representations, the tool attempts to help you better understand the relationship between your data and the computational analysis that results.
+</p>
+<div class="references">
+
+</div>
+ 
 
           
 

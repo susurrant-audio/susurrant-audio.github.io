@@ -42,26 +42,64 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12" id="content">
+	  
           <h1 class="title">Install</h1>
+	  
 
-          <p>I hope to streamline the installation process greatly in the near future, but for now, Susurrant is divided into several packages, each of which carries out a different function.</p>
-<h2 id="dependencies">Dependencies</h2>
-<p>Currently, running Susurrant yourself requires a great deal of Unix and command-line expertise. Here are some of the external applications that must be installed:</p>
+          <p>
+I hope to streamline the installation process greatly in the near future, but for now, Susurrant is divided into several packages, each of which carries out a different function.
+</p>
+<h2 id="dependencies">
+Dependencies
+</h2>
+<p>
+Currently, running Susurrant yourself requires a great deal of Unix and command-line expertise. Here are some of the external applications that must be installed:
+</p>
 <ul>
-<li><a href="http://python.org">Python</a></li>
-<li><a href="http://java.com">Java</a></li>
-<li><a href="http://neo4j.com">Neo4j</a></li>
-<li><a href="https://github.com/JohnLangford/vowpal_wabbit">Vowpal Wabbit</a> for topic modeling</li>
+<li>
+<a href="http://python.org">Python</a>
+</li>
+<li>
+<a href="http://java.com">Java</a>
+</li>
+<li>
+<a href="http://neo4j.com">Neo4j</a>
+</li>
+<li>
+<a href="https://github.com/JohnLangford/vowpal_wabbit">Vowpal Wabbit</a> for topic modeling
+</li>
 </ul>
-<h2 id="corpus-acquisition">Corpus Acquisition</h2>
-<p><a href="http://github.com/susurrant/scdown">scdown</a> is a downloader for SoundCloud: it lets you collect all tracks, social connections, and comments for a given user, storing the audio in <a href="http://">Amazon S3</a> and text/metadata in a <a href="http://neo4j.com">Neo4j</a> database. It can be run locally, or as a one-off process on <a href="http://www.heroku.com">Heroku</a> (recommended for larger datasets).</p>
-<p>Susurrant has no intrinsic dependency on SoundCloud and can be used with any corpus stored in Neo4j with the right format; however, this will set up the metadata and relations appropriately for analysis.</p>
-<h2 id="preprocessing">Preprocessing</h2>
-<p><a href="http://github.com/susurrant/susurrant-py">susurrant-py</a> contains a plethora of scripts to analyze audio files and Neo4j-stored metadata for Susurrant. This is the main point of entry for processing; running GNU <code>make</code> in this repository will carry out the analysis from start to finish.</p>
-<p><a href="http://github.com/susurrant/susurrant-utils">susurrant-utils</a> provides certain utilities that are needed by the Python scripts, and must be present in the location specified in the Makefile.</p>
-<h2 id="visualization-and-sonification">Visualization and Sonification</h2>
-<p>Finally, <a href="http://github.com/susurrant/susurrant-elm">susurrant-elm</a> is the browser-based interface for Susurrant’s output. This client-side application can be run on your computer, or shared over the web as in the <a href="./demo">demo</a> on this site.</p>
-<p>As noted above, all of this is only a temporary arrangement while the different components of Susurrant get folded into a single package (most likely the Scala application that is now <a href="http://github.com/susurrant/susurrant-utils">susurrant-utils</a>). Once this process is complete, collection, analysis, and visualization/sonification will all be achievable through a graphical interface accessed via the browser.</p> 
+<h2 id="corpus-acquisition">
+Corpus Acquisition
+</h2>
+<p>
+<a href="http://github.com/susurrant/scdown">scdown</a> is a downloader for SoundCloud: it lets you collect all tracks, social connections, and comments for a given user, storing the audio in <a href="http://">Amazon S3</a> and text/metadata in a <a href="http://neo4j.com">Neo4j</a> database. It can be run locally, or as a one-off process on <a href="http://www.heroku.com">Heroku</a> (recommended for larger datasets).
+</p>
+<p>
+Susurrant has no intrinsic dependency on SoundCloud and can be used with any corpus stored in Neo4j with the right format; however, this will set up the metadata and relations appropriately for analysis.
+</p>
+<h2 id="preprocessing">
+Preprocessing
+</h2>
+<p>
+<a href="http://github.com/susurrant/susurrant-py">susurrant-py</a> contains a plethora of scripts to analyze audio files and Neo4j-stored metadata for Susurrant. This is the main point of entry for processing; running GNU <code>make</code> in this repository will carry out the analysis from start to finish.
+</p>
+<p>
+<a href="http://github.com/susurrant/susurrant-utils">susurrant-utils</a> provides certain utilities that are needed by the Python scripts, and must be present in the location specified in the Makefile.
+</p>
+<h2 id="visualization-and-sonification">
+Visualization and Sonification
+</h2>
+<p>
+Finally, <a href="http://github.com/susurrant/susurrant-elm">susurrant-elm</a> is the browser-based interface for Susurrant’s output. This client-side application can be run on your computer, or shared over the web as in the <a href="./demo">demo</a> on this site.
+</p>
+<p>
+As noted above, all of this is only a temporary arrangement while the different components of Susurrant get folded into a single package (most likely the Scala application that is now <a href="http://github.com/susurrant/susurrant-utils">susurrant-utils</a>). Once this process is complete, collection, analysis, and visualization/sonification will all be achievable through a graphical interface accessed via the browser.
+</p>
+<div class="references">
+
+</div>
+ 
 
           
 
