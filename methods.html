@@ -89,7 +89,7 @@ Analysis Pipeline
 This flowchart illustrates the different stages of Susurrant’s analysis, each of which will be explained in more detail.
 </p>
 <figure>
-<img src="./images/pipeline.png" alt="Flowchart of pipeline" />
+<img src="./assets/pipeline.png" alt="Flowchart of pipeline" />
 <figcaption>
 Flowchart of pipeline
 </figcaption>
@@ -104,13 +104,13 @@ In the feature extraction phase, Susurrant transforms audio data using the follo
 Mel-frequency Cepstral Coefficients
 </h3>
 <p>
-MFCCs are a measurement of audio’s timbre: is it bright and harsh, or dark and mellow? Often used in speech recognition tasks, the MFCC can distinguish between vowels and consonants; it can also.
+MFCCs are a measurement of audio’s timbre: is it bright and harsh, or dark and mellow? Often used in speech recognition tasks, the MFCC can distinguish between vowels and consonants; it can also be used to characterize the overall character of sound and (if applicable) its instrumentation.
 </p>
 <p>
 MFCCs can be thought of as a “spectrum of a spectrum.” First, the <a href="http://en.wikipedia.org/wiki/Fast_fourier_transform">Fast Fourier transform</a>, used extensively in DSP, transforms an audio signal into the frequency domain. The original time-based signal is analyzed for its intensity across many different frequency bands, in order to produce (for example) the familiar <a href="http://en.wikipedia.org/wiki/Spectrogram">spectrogram</a>. This frequency spectrum is then put through a Mel filterbank: a set of triangular psychoacoustic filters meant to model the frequencies emphasized by the human ear.
 </p>
 <figure>
-<img src="./images/mel_filterbank.gif" alt="Mel filterbank" />
+<img src="./assets/mel_filterbank.gif" alt="Mel filterbank" />
 <figcaption>
 Mel filterbank
 </figcaption>
@@ -119,16 +119,29 @@ Mel filterbank
 Finally, the logarithm of the mel-frequency cepstrum is passed through another transform (the <a href="http://en.wikipedia.org/wiki/Discrete_cosine_transform">Discrete Cosine Transform</a>). All of these steps have the effect of separating out different components of the original sound’s timbre, in a manner independent of the original sound’s pitch.
 </p>
 <p>
-The MFCC holds a great deal of information about the intensity and distribution of different frequencies present in the original audio, in a much smaller space. Often, a vector of only 12 numbers is retained from the 1024 or 2048 samples used in the FFT.
+The MFCC holds a great deal of information about the intensity and distribution of different frequencies present in the original audio, in a very small space. Often, a vector of only 12 numbers is retained from the 1024 or 2048 samples used in the FFT.
 </p>
 <p>
-There are, however, limitations to what the MFCC can capture. Compare, for example, the following audio sample with a reconstruction based on its MFCC representation:
+There are, however, limitations to what the MFCC can capture. Compare, for example, the following audio sample with a reconstruction based on its MFCC representation, drawn from Juhan Nam’s Ph.D work:<span class="citation" data-cites="nam2012"><span class="citation"><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></span></span>
 </p>
-<h4 id="todo-audio-example-of-mfcc">
-TODO: audio example of MFCC
-</h4>
+<figure>
+<audio controls src="./assets/carole_king-origin.wav">
+<a href="./assets/carole_king-origin.wav">Original Audio</a>
+</audio>
+<figcaption>
+Original Audio
+</figcaption>
+</figure>
+<figure>
+<audio controls src="./assets/carole_king-mfcc.wav">
+<a href="./assets/carole_king-mfcc.wav">MFCC reconstruction</a>
+</audio>
+<figcaption>
+MFCC reconstruction
+</figcaption>
+</figure>
 <p>
-Technically, Susurrant uses “gammatone-frequency cepstral coefficients,” a very similar feature that uses a slightly different psychoacoustic model. The above limitations still largely apply.
+Technically, Susurrant uses “gammatone-frequency cepstral coefficients,”<span class="citation" data-cites="gomez2006"><span class="citation"><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></span></span> a very similar feature that uses a slightly different psychoacoustic model. The above limitations still largely apply.
 </p>
 <h3 id="chroma">
 Chroma
@@ -219,6 +232,13 @@ Each feature type in Susurrant represents a different aspect of sound, which the
 </p>
 <div class="references">
 
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Juhan Nam, “Learning Feature Representations for Music Classification” (PhD thesis, Stanford University, 2012), <a href="https://ccrma.stanford.edu/~juhan/thesis.html" class="uri">https://ccrma.stanford.edu/~juhan/thesis.html</a>. <a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Emilia Gómez, “Tonal Description of Polyphonic Audio for Music Content Processing,” <em>INFORMS Journal on Computing, Special Cluster on Computation in Music</em> 18 (2006). <a href="#fnref2">↩</a></p></li>
+</ol>
 </div>
  
 
